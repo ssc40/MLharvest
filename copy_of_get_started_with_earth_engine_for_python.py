@@ -104,43 +104,6 @@ urls = download_thumbnails()
 
 urls
 
-projection['crs']
-
-projection = jan_2023_climate.select(['B5']).projection().getInfo()
-task = ee.batch.Export.image.toDrive(
-    image=jan_2023_climate,
-    description='imageToDriveExample_transform',
-    crs=projection['crs'],
-    crsTransform=projection['transform'],
-    region=geometry,
-)
-task.start()
-
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=200)
-
-writer = tf.io.TFRecordWriter(output, 'GZIP')
-future_to_image = {
-    executor.submit(get_patch, image['id'], 'NDVI'):
-        image['id'] for image in jan_2023_climate
-}
-arrays = ()
-types = []
-for future in concurrent.futures.as_completed(jan_2023_climate):
-  image_id = jan_2023_climate[future]
-  image_name = image_id.split('/')[-1]
-  try:
-      np_array = future.result()
-      arrays += (np_array,)
-      types.append((image_name, np.int_, np_array.shape))
-  except Exception as e:
-      print(e)
-      pass
-array = np.array([arrays], types)
-example_proto = array_to_example(array)
-writer.write(example_proto.SerializeToString())
-writer.flush()
-
-writer.close()
 
 dir(jan_2023_climate)
 downloadParams = {'name': 'jan_2023_climate', 'bands': ['B4', 'B5']}
