@@ -24,12 +24,9 @@ imgs = glob.glob(rotDir)
 # fair weather rgb range
 lowerFairWeather = np.array([240, 240, 240])
 upperFairWeather = np.array([255, 255, 255])
- 
-# upper boundary RED color range values; Hue (160 - 180)
-lower2 = np.array([160, 100, 20])
-upper2 = np.array([179, 255, 255])
 
 counter = 0
+"""
 for n in range(len(imgs)):
     testImgPath = imgs[n]
     image = cv2.imread(testImgPath)
@@ -56,4 +53,36 @@ for n in range(len(imgs)):
 
 
 print(counter)
+
+"""
+
+import glob
+import os
+import sys
+
+image_absolute_path = "C:\\Users\\ssc31_tgwbrje\\Downloads\\earth_img101.png"
+
+def removeCloudsFunc(path):
+    testImgPath = image_absolute_path
+    image = cv2.imread(testImgPath)
+#     print(testImgPath)
+    result = image.copy()
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
+
+    result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
+    dim = np.shape(fairWeather_mask)[0] 
+    counts = np.count_nonzero(fairWeather_mask)
+#     print(counts)
+#     print(dim**2)
+    percent = 100*counts/dim**2
+    subtitle_string = f'{percent}% of the image is red'
+    filename = testImgPath.split('\\')[-1]
+#     print(f'{filename}, {subtitle_string}')
+    if percent > 10.0:
+        counter += 1
+#         print('To be removed')
+    else:
+        pass
 
