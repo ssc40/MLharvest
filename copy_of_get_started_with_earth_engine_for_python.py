@@ -192,20 +192,3 @@ m = geemap.Map(center=[24.1, 447.57], zoom=13)
 m.add_layer(geometry)
 
 m
-
-"""## Add vector data to a map
-
-**1.** Create a vector data object with points for three cities.
-"""
-
-cities = ee.FeatureCollection([
-    ee.Feature(ee.Geometry.Point(10.75, 59.91), {'city': 'Oslo'}),
-    ee.Feature(ee.Geometry.Point(-118.24, 34.05), {'city': 'Los Angeles'}),
-    ee.Feature(ee.Geometry.Point(103.83, 1.33), {'city': 'Singapore'}),
-])
-cities
-
-"""**2.** Add the city locations to the map and redisplay it."""
-
-m.add_layer(cities, name='Cities')
-m
