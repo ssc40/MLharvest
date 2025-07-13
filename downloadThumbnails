@@ -1,0 +1,16 @@
+import ee
+
+# Helper to download image thumbnails
+def download_thumbnails(image_list, geometry):
+    urls = []
+    for i in range(image_list.size().getInfo()):
+        image = ee.Image(image_list.get(i)).visualize(min=0, max=3000)
+        url = image.getThumbURL({
+            'region': geometry,
+            'dimensions': 512,
+            'format': 'jpg'
+        })
+        urls.append(url)
+    return urls
+
+urls = download_thumbnails()

@@ -87,6 +87,8 @@ type(jan_2023_climate)
 # Get a list of individual images
 image_list = jan_2023_climate.toList(jan_2023_climate.size())
 
+"""
+
 # Helper to download image thumbnails
 def download_thumbnails():
     urls = []
@@ -104,6 +106,7 @@ urls = download_thumbnails()
 
 urls
 
+"""
 
 dir(jan_2023_climate)
 downloadParams = {'name': 'jan_2023_climate', 'bands': ['B4', 'B5']}
