@@ -5,25 +5,24 @@
 **1.** Import the Earth Engine and geemap libraries.
 """
 
-import ee
-import geemap.core as geemap
+# import geemap.core as geemap
 
 import concurrent
 import ee
 import google
 import io
 import json
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+# import matplotlib.pyplot as plt
+# import matplotlib.animation as animation
 import multiprocessing
 import numpy as np
-import requests
-import tensorflow as tf
+# import requests
+# import tensorflow as tf
 
 from google.api_core import retry
-from google.colab import auth
-from google.protobuf import json_format
-from IPython.display import Image
+# from google.colab import auth
+# from google.protobuf import json_format
+# from IPython.display import Image
 from matplotlib import rc
 from tqdm.notebook import tqdm
 
@@ -32,7 +31,7 @@ resulting prompts to complete authentication. Be sure to replace PROJECT_ID
 with the name of the project you set up for this quickstart.
 """
 
-ee.Authenticate()
+ee.Authenticate(force=True)
 ee.Initialize(project='ee-ssc314159')
 
 """## Add raster data to a map
@@ -87,10 +86,10 @@ type(jan_2023_climate)
 # Get a list of individual images
 image_list = jan_2023_climate.toList(jan_2023_climate.size())
 
-"""
+
 
 # Helper to download image thumbnails
-def download_thumbnails():
+def download_thumbnails(image_list, ee, geometry):
     urls = []
     for i in range(image_list.size().getInfo()):
         image = ee.Image(image_list.get(i)).visualize(min=0, max=3000)
@@ -106,8 +105,6 @@ urls = download_thumbnails()
 
 urls
 
-"""
-
 dir(jan_2023_climate)
 downloadParams = {'name': 'jan_2023_climate', 'bands': ['B4', 'B5']}
 jan_2023_climate.getDownloadURL(downloadParams)
@@ -115,8 +112,9 @@ jan_2023_climate.getDownloadURL(downloadParams)
 """**2.** Instantiate a map object and add the temperature band as a layer with
 specific visualization properties. Display the map.
 """
-
+"""
 m = geemap.Map(center=[24.1, 447.57], zoom=13)
 m.add_layer(geometry)
 
 m
+"""

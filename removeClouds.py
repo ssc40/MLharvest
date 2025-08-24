@@ -25,64 +25,45 @@ imgs = glob.glob(rotDir)
 lowerFairWeather = np.array([240, 240, 240])
 upperFairWeather = np.array([255, 255, 255])
 
-counter = 0
-"""
-for n in range(len(imgs)):
-    testImgPath = imgs[n]
-    image = cv2.imread(testImgPath)
-#     print(testImgPath)
-    result = image.copy()
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
-    fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
-
-    result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
-    dim = np.shape(fairWeather_mask)[0] 
-    counts = np.count_nonzero(fairWeather_mask)
-#     print(counts)
-#     print(dim**2)
-    percent = 100*counts/dim**2
-    subtitle_string = f'{percent}% of the image is red'
-    filename = testImgPath.split('\\')[-1]
-#     print(f'{filename}, {subtitle_string}')
-    if percent > 10.0:
-        counter += 1
-#         print('To be removed')
-    else:
-        pass
-
-
-print(counter)
-
-"""
 
 import glob
 import os
 import sys
+import shutil
 
-image_absolute_path = "C:\\Users\\ssc31_tgwbrje\\Downloads\\earth_img101.png"
+data_folder = os.path.join('C:\\', 'Users', 'ssc31_tgwbrje', 'Documents', 'GitHub', 'MLHarvest', 'DataSet', 'content', 'Data', 'earth_img*.png')
 
-def removeCloudsFunc(path):
-    testImgPath = image_absolute_path
-    image = cv2.imread(testImgPath)
-#     print(testImgPath)
-    result = image.copy()
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
-    fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
 
-    result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
-    dim = np.shape(fairWeather_mask)[0] 
-    counts = np.count_nonzero(fairWeather_mask)
-#     print(counts)
-#     print(dim**2)
-    percent = 100*counts/dim**2
-    subtitle_string = f'{percent}% of the image is red'
-    filename = testImgPath.split('\\')[-1]
-#     print(f'{filename}, {subtitle_string}')
-    if percent > 10.0:
-        counter += 1
-#         print('To be removed')
-    else:
-        pass
+def removeCloudsFunc(mydata: str):
+    for imgFile in glob.glob(mydata):
+        print(imgFile)
+        counter = 0
+        image = cv2.imread(imgFile)
+    #     print(testImgPath)
+        result = image.copy()
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
 
+        result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
+        dim = np.shape(fairWeather_mask)[0] 
+        counts = np.count_nonzero(fairWeather_mask)
+    #     print(counts)
+    #     print(dim**2)
+        percent = 100*counts/dim**2
+        subtitle_string = f'{percent}% of the image is white'
+        filename = imgFile.split('\\')[-1]
+    #     print(f'{filename}, {subtitle_string}')
+        if percent > 10.0:
+            counter += 1
+            print('To be removed ' + subtitle_string)
+            outfile = os.path.join('DataSet', 'content', 'Data', 'Cloudy', os.path.basename(imgFile))
+            shutil.copy(imgFile, outfile)
+            # path_list.remove(path)
+        else:
+            print('Not removed ' + subtitle_string)
+            outfile = os.path.join('DataSet', 'content', 'Data', 'NotCloudy', os.path.basename(imgFile))
+            shutil.copy(imgFile, outfile)
+
+if __name__ == '__main__':
+    removeCloudsFunc(data_folder)
