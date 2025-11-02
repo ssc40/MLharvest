@@ -22,8 +22,12 @@ imgs = glob.glob(rotDir)
 
 
 # fair weather rgb range
-lowerFairWeather = np.array([240, 240, 240])
-upperFairWeather = np.array([255, 255, 255])
+lowerFairWeather1 = np.array([240, 240, 240])
+upperFairWeather1 = np.array([255, 255, 255])
+
+# some clouds not counted by filter -- supplemental band of white
+lowerFairWeather2 = np.array([])
+upperFairWeather2 = np.array([])
 
 
 import glob
@@ -43,18 +47,20 @@ def removeCloudsFunc(mydata: str):
         result = image.copy()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
-        fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
+        fairWeather_mask1 = cv2.inRange(image, lowerFairWeather1, upperFairWeather1)
 
-        result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
-        dim = np.shape(fairWeather_mask)[0] 
-        counts = np.count_nonzero(fairWeather_mask)
+        result = cv2.bitwise_and(result, result, mask=fairWeather_mask1)
+        length = np.shape(fairWeather_mask1)[0] 
+        width = np.shape(fairWeather_mask1)[1]
+        print(np.shape(fairWeather_mask1))
+        counts = np.count_nonzero(fairWeather_mask1)
     #     print(counts)
     #     print(dim**2)
-        percent = 100*counts/dim**2
+        percent = 100*counts/(length*width)
         subtitle_string = f'{percent}% of the image is white'
         filename = imgFile.split('\\')[-1]
     #     print(f'{filename}, {subtitle_string}')
-        if percent > 10.0:
+        if percent > 0.5:
             counter += 1
             print('To be removed ' + subtitle_string)
             outfile = os.path.join('DataSet', 'content', 'Data', 'Cloudy', os.path.basename(imgFile))
