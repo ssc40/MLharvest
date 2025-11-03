@@ -22,8 +22,8 @@ imgs = glob.glob(rotDir)
 
 
 # fair weather rgb range
-lowerFairWeather = np.array([240, 240, 240])
-upperFairWeather = np.array([255, 255, 255])
+lowerFairWeather1 = np.array([240, 240, 240])
+upperFairWeather1 = np.array([255, 255, 255])
 
 
 import glob
@@ -39,27 +39,24 @@ def removeCloudsFunc(mydata: str):
         print(imgFile)
         counter = 0
         image = cv2.imread(imgFile)
-    #     print(testImgPath)
         result = image.copy()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         
-        fairWeather_mask = cv2.inRange(image, lowerFairWeather, upperFairWeather)
+        fairWeather_mask1 = cv2.inRange(image, lowerFairWeather1, upperFairWeather1)
 
-        result = cv2.bitwise_and(result, result, mask=fairWeather_mask)
-        dim = np.shape(fairWeather_mask)[0] 
-        counts = np.count_nonzero(fairWeather_mask)
-    #     print(counts)
-    #     print(dim**2)
-        percent = 100*counts/dim**2
+        result = cv2.bitwise_and(result, result, mask=fairWeather_mask1)
+        length = np.shape(fairWeather_mask1)[0] 
+        width = np.shape(fairWeather_mask1)[1]
+        print(np.shape(fairWeather_mask1))
+        counts = np.count_nonzero(fairWeather_mask1)
+        percent = 100*counts/(length*width)
         subtitle_string = f'{percent}% of the image is white'
         filename = imgFile.split('\\')[-1]
-    #     print(f'{filename}, {subtitle_string}')
-        if percent > 10.0:
+        if percent > 0.5: #helps to weed out images with too much cloud coverage while not deleting usable images
             counter += 1
             print('To be removed ' + subtitle_string)
             outfile = os.path.join('DataSet', 'content', 'Data', 'Cloudy', os.path.basename(imgFile))
             shutil.copy(imgFile, outfile)
-            # path_list.remove(path)
         else:
             print('Not removed ' + subtitle_string)
             outfile = os.path.join('DataSet', 'content', 'Data', 'NotCloudy', os.path.basename(imgFile))
