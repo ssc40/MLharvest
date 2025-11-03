@@ -176,3 +176,5 @@ cython_debug/
 # Data Set Content Cloudy/Not Cloudy
 DataSet/content/Data/Cloudy/*
 DataSet/content/Data/NotCloudy/*
+CIFAR10
+CIFAR10/*
