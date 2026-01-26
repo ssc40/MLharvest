@@ -31,7 +31,7 @@ import os
 import sys
 import shutil
 
-data_folder = os.path.join('C:\\', 'Users', 'ssc31_tgwbrje', 'Documents', 'GitHub', 'MLHarvest', 'DataSet', 'content', 'Data', 'earth_img*.png')
+data_folder = os.path.join('C:\\', 'Users', 'ssc31_tgwbrje', 'Documents', 'GitHub', 'MLHarvest', 'data', 'earth_img*.png')
 
 
 def removeCloudsFunc(mydata: str):
@@ -55,11 +55,11 @@ def removeCloudsFunc(mydata: str):
         if percent > 0.5: #helps to weed out images with too much cloud coverage while not deleting usable images
             counter += 1
             print('To be removed ' + subtitle_string)
-            outfile = os.path.join('DataSet', 'content', 'Data', 'Cloudy', os.path.basename(imgFile))
+            outfile = os.path.join('data', 'Cloudy', os.path.basename(imgFile))
             shutil.copy(imgFile, outfile)
         else:
             print('Not removed ' + subtitle_string)
-            outfile = os.path.join('DataSet', 'content', 'Data', 'NotCloudy', os.path.basename(imgFile))
+            outfile = os.path.join('data', 'NotCloudy', os.path.basename(imgFile))
             shutil.copy(imgFile, outfile)
 
 if __name__ == '__main__':

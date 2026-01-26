@@ -178,3 +178,6 @@ DataSet/content/Data/Cloudy/*
 DataSet/content/Data/NotCloudy/*
 CIFAR10
 CIFAR10/*
+
+data/*
+data/
