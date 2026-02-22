@@ -3,8 +3,10 @@ from torch.utils.data import Dataset
 import pandas as pd
 import os
 from torchvision.io import decode_image
+from torch.utils.data import random_split
 import sklearn
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
+import torch
 
 class CustomImageDataset(Dataset):
     def __init__(self, img_dir, transform=None, target_transform=None):
@@ -13,6 +15,9 @@ class CustomImageDataset(Dataset):
         self.transform = transform
         self.target_transform = target_transform
         self._temporary_labeling()
+        self.train_imgs = None
+        self.val_imgs = None
+        self.test_imgs = None
         
     def _temporary_labeling(self):
         """Gets called in object construction to label images based on filenames."""
@@ -41,6 +46,21 @@ class CustomImageDataset(Dataset):
         """Get the train, val, test dataframes using sklearn's train_test_split."""
         # return train_df, val_df, test_df
         raise NotImplementedError("This method is not implemented yet.")    
+    
+    def train_test_split(self, train_percent=0.8, val_percent=0.1, test_percent=0.1):
+        assert train_percent + val_percent + test_percent == 1, "Parameters don't add up to 1, not all data used"
+        
+        train_size = int(len(dataset) * train_percent)
+        val_size = int(len(dataset) * val_percent)
+        test_size = len(dataset) - train_size - val_size # Ensure all data is used
+
+        seed = torch.Generator().manual_seed(42)
+        train_dataset, val_dataset, test_dataset = random_split(
+            dataset, 
+            [train_size, val_size, test_size], 
+            generator=seed
+        )
+        return train_dataset, val_dataset, test_dataset
 
 # Example usage
 if __name__ == "__main__":
