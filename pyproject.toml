@@ -1,0 +1,32 @@
+[project]
+name = "mlharvest"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "earthpy>=0.9.4",
+    "ee>=0.2",
+    "geemap>=0.36.6",
+    "matplotlib>=3.10.7",
+    "numpy>=2.3.3",
+    "scikit-learn>=1.8.0",
+    "torch>=2.8.0",
+    "torchvision>=0.23.0",
+    "ipykernel",
+    "seaborn>=0.13.2",
+    "tqdm"
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+dynamic = []
