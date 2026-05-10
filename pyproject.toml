@@ -15,7 +15,9 @@ dependencies = [
     "torchvision>=0.23.0",
     "ipykernel",
     "seaborn>=0.13.2",
-    "tqdm"
+    "tqdm",
+    "opencv-python>=4.13.0.92",
+    "autoreload>=0.1.2",
 ]
 
 [tool.uv.sources]
