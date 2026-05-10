@@ -181,3 +181,5 @@ CIFAR10/*
 
 data/*
 data/
+imageDatasetwithDates/*
+results/*
